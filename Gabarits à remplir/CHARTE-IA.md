@@ -61,5 +61,5 @@ En signant, chaque membre de l'équipe s'engage à :
 | Thenujan NANTHAKUMAR | DEV | J1 - 30/09/2026 |
 | Samuel MIHAILA | DEV | J1 - 30/09/2026 |
 | Ylan LEANG | DATA | J1 - 30/09/2026 |
-| Adam MURKADHAIEV | DATA | J1 - 30/09/2026  |
+| Adam MURDAKHAIEV | DATA | J1 - 30/09/2026  |
 | Nabil MERZOUK | DATA | J1 - 30/09/2026 |

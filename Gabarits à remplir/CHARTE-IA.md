@@ -57,9 +57,9 @@ En signant, chaque membre de l'équipe s'engage à :
 
 | Membre (Prénom NOM) | Parcours (DEV/DATA) | Signature |
 |---|---|---|
-| `[…]` |  |  |
-| `[…]` |  |  |
-| `[…]` |  |  |
-| `[…]` |  |  |
-| `[…]` |  |  |
-| `[…]` |  |  |
+| Adrien GARRIGON-VIRAMOUTOU | DEV | J1 - 23/09/2026 |
+| Thenujan NANTHAKUMAR | DEV | J1 - 30/09/2026 |
+| Samuel MIHAILA | DEV | J1 - 30/09/2026 |
+| Ylan LEANG | DATA | J1 - 30/09/2026 |
+| Adam MURDAKHAIEV | DATA | J1 - 30/09/2026  |
+| Nabil MERZOUK | DATA | J1 - 30/09/2026 |

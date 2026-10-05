@@ -5,8 +5,8 @@ URL = "https://climate-api.open-meteo.com/v1/climate"
 params = {
     "latitude": 50.63,
     "longitude": 3.06,
-    "start_date": "2030-01-01",
-    "end_date": "2030-12-31",
+    "start_date": "1950-01-01",
+    "end_date": "1950-12-31",
     "models": "MRI_AGCM3_2_S",
     "daily": "temperature_2m_mean,temperature_2m_max,temperature_2m_min,precipitation_sum",
 }

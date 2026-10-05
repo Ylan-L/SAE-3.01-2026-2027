@@ -1,4 +1,4 @@
-# 📄 Trame du rapport final — Équipe `[nom de l'équipe]`
+# 📄 Trame du rapport final — Équipe 5 AgriFuture
 
 > **SAÉ 3.01 « Climat & Cultures »** — structure attendue du rapport. Adaptez les longueurs, mais **couvrez toutes les sections**.
 > 💡 Indications de pôle : 💻 = plutôt DEV · 📊 = plutôt DATA · 👥 = commun.

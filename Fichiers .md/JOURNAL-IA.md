@@ -24,7 +24,7 @@
 | Thenujan NANTHAKUMAR | [à compléter ou « Aucun »] | | |
 | Samuel MIHAILA | [à compléter ou « Aucun »] | | |
 | Ylan LEANG | [à compléter ou « Aucun »] | | |
-| Adam MURDAKHAIEV | Aucun | — | — |
+| Adam MURDAKHAIEV | Haiku 4.5  | VS Code| 05/10/2026 |
 | Nabil MERZOUK | [à compléter ou « Aucun »] | | |
 
 *Aucun assistant ambiant utilisé ? Écrivez-le explicitement : « Aucun » — une case vide n'est pas une déclaration.*
@@ -34,7 +34,7 @@
 ## Journal
 
 | Date | Équipier | Outil/modèle | Tâche / contexte | Prompt (résumé) | Sortie IA | Gardé/modifié/rejeté | Justification (vérif. / correction / test) | Tokens (≈) |
-|---|---|---|---|---|---|---|---|---|
+|05/10/2026|Adam|Haiku 4.5 | Test de la clé A et du script d'empreinte Explique en 3 phrases ce qu'est une base de données relationnelle » (question par défaut du script) | Définition d'une BDD relationnelle | **rejeté** (juste un test, pas intégré au projet) | Vérifié que la clé est bien vue et que le comptage de tokens s'affiche | 172 |
 
 *(Ajoutez autant de lignes que nécessaire — notamment celles des autres membres de l'équipe.)*
 

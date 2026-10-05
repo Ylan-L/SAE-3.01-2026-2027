@@ -1,4 +1,4 @@
-# ✍️ Charte d'usage de l'IA — Équipe `[nom de l'équipe]`
+# ✍️ Charte d'usage de l'IA — Équipe 5 AgriFuture
 
 > **SAÉ 3.01 « Climat & Cultures »** — à **signer par tous les membres en J0**, annexée au livrable.
 

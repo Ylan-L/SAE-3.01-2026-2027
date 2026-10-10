@@ -1,4 +1,4 @@
-# 🔁 Revue de sprint — Équipe `[nom]` — Sprint n° `[1 / 2]`
+# 🔁 Revue de sprint — Équipe 5 '[AgriFuture]' — Sprint n° `[1 / 2]`
 
 > **SAÉ 3.01 « Climat & Cultures »** — une fiche par revue (J3 et J4). À conserver dans le dépôt Git.
 

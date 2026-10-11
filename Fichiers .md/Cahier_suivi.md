@@ -33,13 +33,12 @@ SAÉ 3.01 « Climat & Cultures »
 - Sources croisées via FAO ECOCROP, Arvalis, INRAE, IFV, IVES selon les cultures
 - Document d'analyse finalisé : besoin reformulé, personas, backlog priorisé, critères de
   faisabilité, dimensions identifiées
+- Journal IA annexé (usages de l'IA déclarés et justifiés)
+- Tag Git `jalon-1`
+- Coordination finale avec le pôle DEV (maquettes IHM, test API client, architecture)
 
 **Points de vigilance identifiés :**
 - Certaines valeurs du référentiel initial (GDD colza, GDD vigne) ne sont pas confirmées
   telles quelles par les sources trouvées — recoupement nécessaire, conforme à
   l'avertissement de l'énoncé qu'il n'existe pas de base officielle unique
 
-**À faire :**
-- Journal IA annexé (usages de l'IA déclarés et justifiés)
-- Tag Git `jalon-1`
-- Coordination finale avec le pôle DEV (maquettes IHM, test API client, architecture)

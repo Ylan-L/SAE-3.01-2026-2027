@@ -248,4 +248,4 @@ if __name__ == "__main__":
         bilan(int(args[1].replace(" ", "")))
     else:
         demonstration(" ".join(args) or
-                      "Explique en 3 phrases ce qu'est une base de données relationnelle.")
+                      "Explique en quelques phrases ce qu'est un schéma en étoiles en base de données, avec un exemple simple.")

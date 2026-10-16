@@ -34,7 +34,9 @@
 ## Journal
 
 | Date | Équipier | Outil/modèle | Tâche / contexte | Prompt (résumé) | Sortie IA | Gardé/modifié/rejeté | Justification (vérif. / correction / test) | Tokens (≈) |
-|05/10/2026|Adam|Haiku 4.5 | Test de la clé A et du script d'empreinte Explique en 3 phrases ce qu'est une base de données relationnelle » (question par défaut du script) | Définition d'une BDD relationnelle | **rejeté** (juste un test, pas intégré au projet) | Vérifié que la clé est bien vue et que le comptage de tokens s'affiche | 172 |
+| 05/10/2026 | Adam | Haiku 4.5 | Test de la clé A et du script d'empreinte Explique en 3 phrases ce qu'est une base de données relationnelle | (question par défaut du script) | Définition d'une BDD relationnelle | **rejeté** (juste un test, pas intégré au projet) | Vérifié que la clé est bien vue et que le comptage de tokens s'affiche | 172 |
+| 12/10/2026 | Adam | Haiku 4.5 | Comprendre le schéma en étoile avant de modéliser la BDD (SAÉ) | « Explique en quelques phrases ce qu'est un schéma en étoile, avec un exemple simple » | Définition (table de faits centrale + tables de dimensions) et exemple d'une boutique : faits = ventes ; dimensions = produit, temps, client, magasin ; schéma exemple | **gardé** (compris, non copié dans le livrable) | Comparé à quelque recherche que j'ai fait ; je vais relié cela à notre propre schéma (dim_commune, dim_culture, Fact_Indicateur) pour vérifier que j'ai compris le rôle de chaque table | 336 |
+
 
 *(Ajoutez autant de lignes que nécessaire — notamment celles des autres membres de l'équipe.)*
 

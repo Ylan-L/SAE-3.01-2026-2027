@@ -1,5 +1,4 @@
 # exporter_echantillon.py : échantillon RÉEL au format du contrat
-# À lancer depuis le dossier du dépôt (communes-reference.csv, .env)
 import csv
 from openmeteo_client import _appel_api
 

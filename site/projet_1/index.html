@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Accueil — AgriFutur</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main>
+
+  <header class="site-header">
+    <input type="checkbox" id="menu-toggle" class="menu-toggle" aria-label="Ouvrir le menu">
+    <a class="brand" href="index.html" aria-label="AgriFutur, accueil">
+      <span class="brand-mark"><svg aria-hidden="true" fill="none" height="22" width="22" viewBox="0 0 24 24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"><path d="M20 4c-8 0-14 4-14 10 0 3 2 5 5 5 6 0 9-7 9-15Z"/><path d="M4 21c2-5 6-9 12-12"/></svg></span>
+      <span>AgriFutur</span>
+    </a>
+    <nav class="nav" aria-label="Navigation principale">
+      <a href="index.html" class="active" aria-current="page">Accueil</a>
+      <a href="explorer.html">Choisir</a>
+      <a href="comparer.html">Comparer</a>
+      <a href="carte.html">Carte</a>
+      <a href="methode.html">Méthodologie</a>
+      <a href="aide.html">Aide</a>
+      <a href="apropos.html">À propos</a>
+    </nav>
+    <div class="header-actions">
+      <a class="login-link" href="connexion.html">Connexion</a>
+      <span class="projection-badge"><span></span> Projections 2050</span>
+      <label class="menu-button" for="menu-toggle"><svg aria-hidden="true" fill="none" height="20" width="20" viewBox="0 0 24 24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"><path d="M4 7h16"/><path d="M4 12h16"/><path d="M4 17h16"/></svg></label>
+    </div>
+  </header>
+
+  <section class="hero" id="accueil">
+    <div class="orb orb-one"></div>
+    <div class="orb orb-two"></div>
+    <div class="hero-copy">
+      <div class="eyebrow"><svg aria-hidden="true" fill="none" height="16" width="16" viewBox="0 0 24 24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"><path d="m12 3 1.3 4.2L17 9l-3.7 1.8L12 15l-1.3-4.2L7 9l3.7-1.8L12 3Z"/><path d="m19 15 .7 2.3L22 18l-2.3.7L19 21l-.7-2.3L16 18l2.3-.7L19 15Z"/></svg> Agriculture &amp; climat futur</div>
+      <h1>Comment le climat de votre commune va-t-il évoluer d’ici 2050, et quelles cultures y resteront possibles ?</h1>
+      <p>Découvrez le climat de votre commune en 2050 et les cultures qui pourront encore y pousser.</p>
+      <div class="quick-search">
+        <label for="quick-commune">Votre commune</label>
+        <div>
+          <span><svg aria-hidden="true" fill="none" height="18" width="18" viewBox="0 0 24 24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg></span>
+          <input id="quick-commune" type="search" list="communes" placeholder="Nom ou code postal" value="Reims · 51454" autocomplete="off"><datalist id="communes"><option value="Lille · 59350"><option value="Brest · 29019"><option value="Rennes · 35238"><option value="Reims · 51454"><option value="Paris · 75056"><option value="Orléans · 45234"><option value="Strasbourg · 67482"><option value="Nancy · 54395"><option value="Dijon · 21231"><option value="Clermont-Ferrand · 63113"><option value="Lyon · 69123"><option value="Bordeaux · 33063"><option value="Toulouse · 31555"><option value="Avignon · 84007"><option value="Montpellier · 34172"><option value="Briançon · 05023"></datalist>
+          <a class="quick-button" href="explorer.html">Commencer <svg aria-hidden="true" fill="none" height="18" width="18" viewBox="0 0 24 24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg></a>
+        </div>
+      </div>
+      <p class="honesty">Ce sont des projections, pas des prévisions.</p>
+      <div class="hero-trust">
+        <div class="avatars" aria-hidden="true"><span>IN</span><span>ME</span><span>AG</span></div>
+        <div><strong>Des sources ouvertes</strong><small>Trajectoire de référence pour l’adaptation</small></div>
+      </div>
+    </div>
+
+    <div class="hero-visual" aria-label="Aperçu de la projection climatique">
+      <div class="year-label">Horizon <strong>2050</strong></div>
+      <div class="crop-illustration">
+        <svg viewBox="0 0 520 420" role="img" aria-label="Illustration d'un champ cultivé">
+          <defs>
+            <linearGradient id="sky" x1="0" x2="0" y1="0" y2="1">
+              <stop offset="0" stop-color="#e9f0dd"/>
+              <stop offset="1" stop-color="#f4ead3"/>
+            </linearGradient>
+          </defs>
+          <rect width="520" height="420" rx="180" fill="url(#sky)"/>
+          <circle cx="378" cy="102" r="54" fill="#f7c769" opacity=".9"/>
+          <path d="M0 258c111-49 208-42 302-8 87 32 154 29 218 8v162H0Z" fill="#9aa952"/>
+          <path d="M0 301c105-42 210-25 303 10 88 33 152 23 217-6v115H0Z" fill="#71833c"/>
+          <path d="M0 345c133-30 221-10 322 27 75 28 138 13 198-8v56H0Z" fill="#516a30"/>
+              <g transform="translate(90 160)" stroke="#455825" stroke-width="4" stroke-linecap="round">
+                <path d="M0 170C3 105 0 63 4 0"/>
+                <path d="M3 38c-28 1-36-18-38-34 22 0 35 10 38 34Z" fill="#d9af3f"/>
+                <path d="M3 72c27-1 35-19 37-35-21 1-34 11-37 35Z" fill="#e5bd4e"/>
+                <path d="M2 104c-27 0-34-18-35-33 20 0 32 10 35 33Z" fill="#d5a83b"/>
+              </g>
+              <g transform="translate(150 198)" stroke="#455825" stroke-width="4" stroke-linecap="round">
+                <path d="M0 170C3 105 0 63 4 0"/>
+                <path d="M3 38c-28 1-36-18-38-34 22 0 35 10 38 34Z" fill="#d9af3f"/>
+                <path d="M3 72c27-1 35-19 37-35-21 1-34 11-37 35Z" fill="#e5bd4e"/>
+                <path d="M2 104c-27 0-34-18-35-33 20 0 32 10 35 33Z" fill="#d5a83b"/>
+              </g>
+              <g transform="translate(215 160)" stroke="#455825" stroke-width="4" stroke-linecap="round">
+                <path d="M0 170C3 105 0 63 4 0"/>
+                <path d="M3 38c-28 1-36-18-38-34 22 0 35 10 38 34Z" fill="#d9af3f"/>
+                <path d="M3 72c27-1 35-19 37-35-21 1-34 11-37 35Z" fill="#e5bd4e"/>
+                <path d="M2 104c-27 0-34-18-35-33 20 0 32 10 35 33Z" fill="#d5a83b"/>
+              </g>
+              <g transform="translate(278 198)" stroke="#455825" stroke-width="4" stroke-linecap="round">
+                <path d="M0 170C3 105 0 63 4 0"/>
+                <path d="M3 38c-28 1-36-18-38-34 22 0 35 10 38 34Z" fill="#d9af3f"/>
+                <path d="M3 72c27-1 35-19 37-35-21 1-34 11-37 35Z" fill="#e5bd4e"/>
+                <path d="M2 104c-27 0-34-18-35-33 20 0 32 10 35 33Z" fill="#d5a83b"/>
+              </g>
+              <g transform="translate(345 160)" stroke="#455825" stroke-width="4" stroke-linecap="round">
+                <path d="M0 170C3 105 0 63 4 0"/>
+                <path d="M3 38c-28 1-36-18-38-34 22 0 35 10 38 34Z" fill="#d9af3f"/>
+                <path d="M3 72c27-1 35-19 37-35-21 1-34 11-37 35Z" fill="#e5bd4e"/>
+                <path d="M2 104c-27 0-34-18-35-33 20 0 32 10 35 33Z" fill="#d5a83b"/>
+              </g>
+              <g transform="translate(410 198)" stroke="#455825" stroke-width="4" stroke-linecap="round">
+                <path d="M0 170C3 105 0 63 4 0"/>
+                <path d="M3 38c-28 1-36-18-38-34 22 0 35 10 38 34Z" fill="#d9af3f"/>
+                <path d="M3 72c27-1 35-19 37-35-21 1-34 11-37 35Z" fill="#e5bd4e"/>
+                <path d="M2 104c-27 0-34-18-35-33 20 0 32 10 35 33Z" fill="#d5a83b"/>
+              </g>
+        </svg>
+      </div>
+      <div class="floating-card">
+        <span class="floating-icon"><svg aria-hidden="true" fill="none" height="18" width="18" viewBox="0 0 24 24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"><path d="M12 2v20"/><path d="m4.9 6 14.2 12"/><path d="m4.9 18 14.2-12"/><path d="m9 4 3 3 3-3"/><path d="m9 20 3-3 3 3"/></svg></span>
+        <div><small>Risque de gel tardif</small><strong>En diminution</strong></div>
+        <span class="trend">− 8 à 14 j</span>
+      </div>
+    </div>
+  </section>
+  <section class="journey" aria-label="Comment ça marche">
+    <div class="journey-intro">
+      <p class="kicker">Simple et transparent</p>
+      <h2>Votre projection en trois étapes.</h2>
+    </div>
+    <div class="journey-steps">
+      <article><span>01</span><div class="step-icon"><svg aria-hidden="true" fill="none" height="20" width="20" viewBox="0 0 24 24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg></div><strong>Choisissez</strong><p>Une commune, une culture et un horizon.</p></article>
+      <article><span>02</span><div class="step-icon"><svg aria-hidden="true" fill="none" height="20" width="20" viewBox="0 0 24 24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"><path d="m12 3 1.3 4.2L17 9l-3.7 1.8L12 15l-1.3-4.2L7 9l3.7-1.8L12 3Z"/><path d="m19 15 .7 2.3L22 18l-2.3.7L19 21l-.7-2.3L16 18l2.3-.7L19 15Z"/></svg></div><strong>Nous analysons</strong><p>Les projections de plusieurs modèles climatiques.</p></article>
+      <article><span>03</span><div class="step-icon"><svg aria-hidden="true" fill="none" height="20" width="20" viewBox="0 0 24 24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"><path d="m5 12 4 4L19 6"/></svg></div><strong>Vous comprenez</strong><p>Un verdict nuancé, sa fourchette et ses limites.</p></article>
+    </div>
+  </section>
+  <section class="example">
+    <div><p class="kicker">Un exemple de résultat</p><h2>La vigne à Reims en 2050.</h2></div>
+    <div class="example-card">
+      <span class="verdict-icon"><svg aria-hidden="true" fill="none" height="25" width="25" viewBox="0 0 24 24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"><path d="m5 12 4 4L19 6"/></svg></span>
+      <div><small>Verdict indicatif</small><strong>Viable</strong></div>
+      <p>La vigne reste possible à Reims en 2050, mais attention au gel au printemps.</p>
+      <a class="primary-button" href="explorer.html#resultats">Voir le résultat <svg aria-hidden="true" fill="none" height="20" width="20" viewBox="0 0 24 24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg></a>
+    </div>
+  </section>
+
+  <section class="audiences">
+    <div>
+      <p class="kicker">Un outil pour le territoire</p>
+      <h2>Comprendre aujourd’hui pour mieux s’adapter demain.</h2>
+    </div>
+    <div class="audience-cards">
+      <article><span>AG</span><strong>Agriculteurs</strong><p>Anticiper les risques qui comptent pour une culture.</p></article>
+      <article><span>CO</span><strong>Collectivités</strong><p>Éclairer les politiques locales d’adaptation.</p></article>
+      <article><span>CP</span><strong>Coopératives</strong><p>Partager une lecture commune des futurs possibles.</p></article>
+    </div>
+  </section>
+
+  <footer>
+    <a class="brand footer-brand" href="index.html"><span class="brand-mark"><svg aria-hidden="true" fill="none" height="22" width="22" viewBox="0 0 24 24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"><path d="M20 4c-8 0-14 4-14 10 0 3 2 5 5 5 6 0 9-7 9-15Z"/><path d="M4 21c2-5 6-9 12-12"/></svg></span><span>AgriFutur</span></a>
+    <p>Projections climatiques indicatives, pas des prévisions.</p>
+    <div class="scope"><a href="mentions.html">Mentions légales</a><a href="rgpd.html">Confidentialité (RGPD)</a><a href="methode.html">Méthodologie et sources</a><a href="aide.html">Aide et glossaire</a><a href="apropos.html">À propos</a><a href="apropos.html#contact">Contact</a></div>
+    <div class="logos"><span>UPEC</span><span>IUT de Créteil-Vitry</span></div>
+  </footer>
+
+</main>
+</body>
+</html>

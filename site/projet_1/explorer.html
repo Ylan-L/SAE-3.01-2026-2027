@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Explorer — AgriFutur</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="subpage">
+<main>
+
+  <header class="site-header">
+    <input type="checkbox" id="menu-toggle" class="menu-toggle" aria-label="Ouvrir le menu">
+    <a class="brand" href="index.html" aria-label="AgriFutur, accueil">
+      <span class="brand-mark"><svg aria-hidden="true" fill="none" height="22" width="22" viewBox="0 0 24 24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"><path d="M20 4c-8 0-14 4-14 10 0 3 2 5 5 5 6 0 9-7 9-15Z"/><path d="M4 21c2-5 6-9 12-12"/></svg></span>
+      <span>AgriFutur</span>
+    </a>
+    <nav class="nav" aria-label="Navigation principale">
+      <a href="index.html">Accueil</a>
+      <a href="explorer.html" class="active" aria-current="page">Choisir</a>
+      <a href="comparer.html">Comparer</a>
+      <a href="carte.html">Carte</a>
+      <a href="methode.html">Méthodologie</a>
+      <a href="aide.html">Aide</a>
+      <a href="apropos.html">À propos</a>
+    </nav>
+    <div class="header-actions">
+      <a class="login-link" href="connexion.html">Connexion</a>
+      <span class="projection-badge"><span></span> Projections 2050</span>
+      <label class="menu-button" for="menu-toggle"><svg aria-hidden="true" fill="none" height="20" width="20" viewBox="0 0 24 24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"><path d="M4 7h16"/><path d="M4 12h16"/><path d="M4 17h16"/></svg></label>
+    </div>
+  </header>
+  <nav class="breadcrumb" aria-label="Fil d’Ariane"><a href="index.html">Accueil</a> › Choisir</nav>
+
+  <section class="explorer" id="explorer">
+    <div class="section-heading">
+      <span class="section-number">01</span>
+      <div>
+        <p class="kicker">Votre territoire</p>
+        <h2>Quel avenir pour votre culture ?</h2>
+      </div>
+      <p class="heading-note">Sélectionnez une commune, une culture et un horizon pour obtenir une première projection.</p>
+    </div>
+
+    <div class="selection-card">
+      <div class="field">
+        <label for="commune"><span><svg aria-hidden="true" fill="none" height="17" width="17" viewBox="0 0 24 24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg></span> Votre commune</label>
+        <div class="select-wrap">
+          <input id="commune" type="search" list="communes" placeholder="Nom ou code postal" value="Reims · 51454" autocomplete="off"><datalist id="communes"><option value="Lille · 59350"><option value="Brest · 29019"><option value="Rennes · 35238"><option value="Reims · 51454"><option value="Paris · 75056"><option value="Orléans · 45234"><option value="Strasbourg · 67482"><option value="Nancy · 54395"><option value="Dijon · 21231"><option value="Clermont-Ferrand · 63113"><option value="Lyon · 69123"><option value="Bordeaux · 33063"><option value="Toulouse · 31555"><option value="Avignon · 84007"><option value="Montpellier · 34172"><option value="Briançon · 05023"></datalist>
+          <svg aria-hidden="true" fill="none" height="18" width="18" viewBox="0 0 24 24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"><path d="m9 18 6-6-6-6"/></svg>
+        </div>
+        <small>16 communes disponibles pour l’instant. <a href="erreurs.html#commune">Commune introuvable ?</a></small>
+      </div>
+
+      <div class="field">
+        <label for="culture"><span><svg aria-hidden="true" fill="none" height="17" width="17" viewBox="0 0 24 24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"><path d="M20 4c-8 0-14 4-14 10 0 3 2 5 5 5 6 0 9-7 9-15Z"/><path d="M4 21c2-5 6-9 12-12"/></svg></span> Votre culture</label>
+        <div class="select-wrap">
+          <select id="culture">
+                <option>🌾 Blé tendre</option>
+                <option>🌼 Colza</option>
+                <option>🌽 Maïs grain</option>
+                <option>🌾 Orge d'hiver</option>
+                <option>🫛 Pois protéagineux</option>
+                <option>🥔 Pomme de terre</option>
+                <option>🌱 Soja</option>
+                <option>🌻 Tournesol</option>
+                <option selected>🍇 Vigne</option>
+                <option>🍎 Verger de pommiers</option>
+          </select>
+          <svg aria-hidden="true" fill="none" height="18" width="18" viewBox="0 0 24 24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"><path d="m9 18 6-6-6-6"/></svg>
+        </div>
+        <small>10 cultures référencées</small>
+      </div>
+
+      <div class="field year-field">
+        <label><span><svg aria-hidden="true" fill="none" height="17" width="17" viewBox="0 0 24 24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"><path d="m12 3 1.3 4.2L17 9l-3.7 1.8L12 15l-1.3-4.2L7 9l3.7-1.8L12 3Z"/><path d="m19 15 .7 2.3L22 18l-2.3.7L19 21l-.7-2.3L16 18l2.3-.7L19 15Z"/></svg></span> Horizon</label>
+        <div class="year-options" role="group" aria-label="Choisir l'horizon">
+          <button type="button">Aujourd’hui</button>
+          <button type="button">2030</button>
+          <button type="button">2040</button>
+          <button type="button" class="active">2050</button>
+        </div>
+        <small>La période 2041—2060 représente l’horizon 2050</small>
+      </div>
+
+      <a class="primary-button" href="#resultats">Voir le résultat <svg aria-hidden="true" fill="none" height="20" width="20" viewBox="0 0 24 24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg></a>
+    </div>
+
+    <details class="advanced-options">
+      <summary>Options avancées <span>Choisir ou comparer les modèles climatiques</span></summary>
+      <div>
+        <p>Modèle par défaut : <strong>EC-Earth3</strong></p>
+        <p>Un modèle climatique est une simulation du climat futur. Vous pouvez en choisir un ou en comparer deux.</p>
+      </div>
+    </details>
+    <p class="data-note"><svg aria-hidden="true" fill="none" height="16" width="16" viewBox="0 0 24 24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><path d="M12 8h.01"/></svg> Les résultats sont des projections climatiques, pas des prévisions météorologiques.</p>
+  </section>
+  <section class="results" id="resultats">
+    <div class="result-header">
+      <div>
+        <div class="eyebrow light"><svg aria-hidden="true" fill="none" height="16" width="16" viewBox="0 0 24 24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"><path d="m12 3 1.3 4.2L17 9l-3.7 1.8L12 15l-1.3-4.2L7 9l3.7-1.8L12 3Z"/><path d="m19 15 .7 2.3L22 18l-2.3.7L19 21l-.7-2.3L16 18l2.3-.7L19 15Z"/></svg> Projection personnalisée</div>
+        <h2>Vigne à Reims</h2>
+      </div>
+      <div class="choice-summary">
+        <span>Reims · 51454</span><span>Vigne</span><span>Horizon 2050</span>
+        <a class="choice-edit" href="#explorer">Modifier</a>
+      </div>
+    </div>
+
+    <div class="main-verdict">
+      <span class="verdict-seal"><svg aria-hidden="true" fill="none" height="28" width="28" viewBox="0 0 24 24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"><path d="m5 12 4 4L19 6"/></svg></span>
+      <div><small>Verdict global indicatif</small><strong>Viable</strong></div>
+      <p>La vigne reste possible à Reims en 2050, mais attention au gel au printemps.</p>
+    </div>
+
+    <div class="result-grid">
+      <article class="verdict-card">
+        <div class="card-topline"><span class="must-chip">MVP · INDICATEUR 01</span><svg aria-hidden="true" fill="none" height="20" width="20" viewBox="0 0 24 24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"><path d="M12 2v20"/><path d="m4.9 6 14.2 12"/><path d="m4.9 18 14.2-12"/><path d="m9 4 3 3 3-3"/><path d="m9 20 3-3 3 3"/></svg></div>
+        <p class="card-label">Évolution du risque de gel tardif</p>
+        <div class="verdict">
+          <span class="verdict-icon"><svg aria-hidden="true" fill="none" height="25" width="25" viewBox="0 0 24 24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"><path d="m5 12 4 4L19 6"/></svg></span>
+          <div><small>Tendance projetée</small><strong>En diminution</strong></div>
+        </div>
+        <div class="range"><span>Entre</span><strong>−8</strong><span>et</span><strong>−14 jours</strong></div>
+        <p class="interpretation">La dernière gelée de printemps pourrait survenir plus tôt dans l’année par rapport à la période 1976—2005.</p>
+        <div class="reliability">
+          <span>Confiance du modèle</span>
+          <div><i></i><i></i><i></i><i class="muted"></i><i class="muted"></i></div>
+          <strong>Modérée</strong>
+        </div>
+      </article>
+
+      <article class="chart-card">
+        <div class="card-topline">
+          <span class="should-chip">SHOULD · ÉVOLUTION</span>
+          <button class="table-toggle" type="button">Voir le tableau</button>
+        </div>
+        <p class="card-label">Évolution de la date de dernière gelée</p>
+        <div class="chart">
+          <div class="chart-y"><span>15 avr.</span><span>1 avr.</span><span>15 mars</span><span>1 mars</span></div>
+          <div class="chart-area">
+            <svg viewBox="0 0 400 150" preserveAspectRatio="none" role="img" aria-label="Courbe montrant une diminution du risque de gel">
+              <path d="M0 45C70 44 100 50 150 58S240 82 300 98s75 17 100 20V145H0Z" fill="#dbe8c5" opacity=".65"/>
+              <polyline points="0,58 50,60 100,65 150,72 200,82 250,91 300,103 350,111 400,118" fill="none" stroke="#456329" stroke-width="4" vector-effect="non-scaling-stroke"/>
+              <line x1="250" x2="250" y1="0" y2="145" stroke="#bac7a8" stroke-dasharray="5 5"/>
+              <circle cx="250" cy="91" r="6" fill="#456329" stroke="#fff" stroke-width="3" vector-effect="non-scaling-stroke"/>
+            </svg>
+            <div class="chart-labels"><span>2020</span><span>2030</span><span>2040</span><span>2050</span></div>
+          </div>
+          <div class="chart-callout"><small>Projection médiane</small><strong>18 mars</strong><span>± 6 jours</span></div>
+        </div>
+        <div class="uncertainty"><svg aria-hidden="true" fill="none" height="17" width="17" viewBox="0 0 24 24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><path d="M12 8h.01"/></svg><span>La zone claire représente l’incertitude entre les modèles.</span></div>
+        <p class="chart-explainer"><strong>Ce que montre ce graphique :</strong> la dernière gelée tend à arriver plus tôt. Données lissées sur une zone d’environ 10 km.</p>
+      </article>
+    </div>
+
+    <div class="indicator-row"><article><span class="should-chip">SOUHAITABLE</span><strong>Chaleur</strong><small>Stress thermique</small><p>Entre +6 et +12 jours à plus de 30 °C</p><em class="bad"><svg aria-hidden="true" fill="none" height="18" width="18" viewBox="0 0 24 24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"><path d="M12 3 2.8 20h18.4L12 3Z"/><path d="M12 9v5"/><path d="M12 17h.01"/></svg> À risque</em></article><article><span class="should-chip">SOUHAITABLE</span><strong>Eau</strong><small>Bilan hydrique</small><p>Entre −40 et −90 mm sur la saison</p><em class="bad"><svg aria-hidden="true" fill="none" height="18" width="18" viewBox="0 0 24 24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"><path d="M12 3 2.8 20h18.4L12 3Z"/><path d="M12 9v5"/><path d="M12 17h.01"/></svg> À risque</em></article><article><span class="should-chip">SOUHAITABLE</span><strong>Maturité</strong><small>Sommes de températures</small><p>Entre +180 et +320 °C·jour</p><em class="good"><svg aria-hidden="true" fill="none" height="18" width="18" viewBox="0 0 24 24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"><path d="m5 12 4 4L19 6"/></svg> Viable</em></article></div>
+
+    <p class="detail-link"><a href="indicateurs.html">Voir le détail des indicateurs →</a></p>
+
+    <div class="warning-banner">
+      <span class="warning-icon"><svg aria-hidden="true" fill="none" height="20" width="20" viewBox="0 0 24 24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"><path d="M12 3 2.8 20h18.4L12 3Z"/><path d="M12 9v5"/><path d="M12 17h.01"/></svg></span>
+      <div>
+        <strong>À lire avant d’interpréter</strong>
+        <p>Cette projection exprime une tendance et une fourchette. Elle ne constitue ni une prévision météo, ni un conseil agronomique.</p>
+      </div>
+      <a href="methode.html">Comment c’est calculé ? <svg aria-hidden="true" fill="none" height="17" width="17" viewBox="0 0 24 24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg></a>
+    </div>
+
+    <div class="territory-context">
+      <span><svg aria-hidden="true" fill="none" height="17" width="17" viewBox="0 0 24 24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg></span>
+      <div><small>Contexte territorial</small><strong>Champagne — vigne</strong></div>
+      <p>Océanique dégradé · 49.26°, 4.03° · altitude 85 m</p>
+    </div>
+
+    <div class="result-actions">
+      <a class="light-button" href="evolution.html">Voir l’évolution du climat <svg aria-hidden="true" fill="none" height="17" width="17" viewBox="0 0 24 24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg></a>
+      <a class="outline-button" href="comparer.html">Comparer deux projections</a>
+      <button class="outline-button" type="button">☆ Ajouter aux favoris</button>
+    </div>
+  </section>
+
+  <footer>
+    <a class="brand footer-brand" href="index.html"><span class="brand-mark"><svg aria-hidden="true" fill="none" height="22" width="22" viewBox="0 0 24 24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"><path d="M20 4c-8 0-14 4-14 10 0 3 2 5 5 5 6 0 9-7 9-15Z"/><path d="M4 21c2-5 6-9 12-12"/></svg></span><span>AgriFutur</span></a>
+    <p>Projections climatiques indicatives, pas des prévisions.</p>
+    <div class="scope"><a href="mentions.html">Mentions légales</a><a href="rgpd.html">Confidentialité (RGPD)</a><a href="methode.html">Méthodologie et sources</a><a href="aide.html">Aide et glossaire</a><a href="apropos.html">À propos</a><a href="apropos.html#contact">Contact</a></div>
+    <div class="logos"><span>UPEC</span><span>IUT de Créteil-Vitry</span></div>
+  </footer>
+
+</main>
+</body>
+</html>

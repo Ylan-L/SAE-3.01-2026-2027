@@ -401,9 +401,11 @@ h1 em { color: var(--green); font-weight: 400; }
 .method-list strong { font-size: 12px; }
 .method-list p { margin: 0; color: var(--ink-soft); font-size: 10px; line-height: 1.6; }
 
-footer { display: flex; align-items: center; gap: 30px; padding: 34px 6vw; color: #d9e0d3; background: #16291e; }
+footer { display: flex; align-items: center; gap: 30px; padding: 34px 6vw; color: #d9e0d3; background: #35483c; }
 .footer-brand { color: var(--white); }
 footer > p { margin: 0 auto 0 0; font-size: 9px; }
+footer .logos { flex: 0 0 auto; margin-top: 0; }
+footer .logos img { display: block; width: 170px; max-width: 100%; height: auto; }
 .scope { display: flex; gap: 7px; }
 .scope span { padding: 7px 9px; border: 1px solid rgba(255,255,255,.17); border-radius: 99px; font-size: 8px; text-transform: uppercase; letter-spacing: .05em; }
 

@@ -1,4 +1,4 @@
--- Données des dimensions (INSERT) — à coller/importer APRÈS 01_creation_base.sql
+-- Données des dimensions (INSERT) 
 
 INSERT INTO dim_culture (id_culture, nom, t_base_c, gdd_maturite_cj, seuil_gel_c, besoin_eau_mm, t_opt_min_c, t_opt_max_c, seuil_stress_thermique_c, source) VALUES
 (1, 'Blé tendre hiver', 0, 2150, -4, 500, 15, 22, 30, 't_base: https://www.isagri.fr/ressources/articles/temps-thermique-lindicateur-cl%C3%A9-de-pr%C3%A9vision-des-stades-de-culture ; gdd: https://farmergrows.com/heat-units-gdd-calculator/ ; gel: https://fiches.arvalis-infos.fr/fiche_accident/fiches_accidents.php?mode=fa&type_cul=1&type_acc=5&id_acc=67 ; eau: https://www.arvalis.fr/infos-techniques/declencher-lirrigation-au-bon-moment ; T°opt: https://farmergrows.com/heat-units-gdd-calculator/ ; stress: https://climatology.edpsciences.org/articles/climat/full_html/2019/01/climat201916p129/climat201916p129.html ; NOTE: Vernalisation absente du référentiel (15-60 j entre 3 et 10 °C).'),

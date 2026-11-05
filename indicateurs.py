@@ -25,16 +25,6 @@ regroupées dans PARAMS_CULTURE ci-dessous : faciles à lire, à discuter, à mo
 import math
 from collections import defaultdict
 
-# --------------------------------------------------------------------------
-# Hypothèses par culture (clé = nom exact dans dim_culture)
-#   saison : (mois_debut, mois_fin) — fenêtre des GDD, du stress, de la T° optimale et du bilan.
-#            Si mois_debut > mois_fin, la saison enjambe le nouvel an (ex. blé oct -> juil) et
-#            elle est rattachée à l'année de RÉCOLTE.
-#   gel    : (mois_debut, mois_fin) — fenêtre où le gel est critique (débourrement, floraison...).
-#   plafond_tx : plafond de t_max pour les GDD (None = aucun).
-# Sources des fenêtres : DRIAS/ORACLE (blé oct->juil, maïs saison, plafond 30 °C) ;
-# les autres sont des choix d'équipe NON SOURCÉS (à valider en J2.4).
-# --------------------------------------------------------------------------
 DEFAUT = {"saison": (4, 10), "gel": (3, 5), "plafond_tx": None}
 PARAMS_CULTURE = {
     "Blé tendre hiver":       {"saison": (10, 7), "gel": (3, 5), "plafond_tx": None},

@@ -127,6 +127,32 @@ def recuperer_tmin(latitude, longitude, date_debut, date_fin, modele="MRI_AGCM3_
     return {"date": daily["time"], "t_min": daily.get("temperature_2m_min", [])}
 
 
+def recuperer_serie(id_commune, latitude, longitude, date_debut, date_fin, modele="MRI_AGCM3_2_S"):
+    """Série complète au format du contrat DEV -> DATA (CONTRAT-INTERFACE.md §1) :
+    liste de dicts {id_commune, date, t_min, t_max, t_moy, precip}, un jour par ligne.
+    Période à demander : du 1er juillet de annee_debut-1 au 31 décembre de annee_fin (§1.1).
+    Les valeurs manquantes restent à None : DATA sait les gérer."""
+    params = {
+        "latitude": latitude, "longitude": longitude,
+        "start_date": date_debut, "end_date": date_fin,
+        "models": modele,
+        "daily": "temperature_2m_min,temperature_2m_max,temperature_2m_mean,precipitation_sum",
+    }
+    daily = (_appel_api(params).get("daily") or {})
+    dates = daily.get("time")
+    if not dates:
+        raise RuntimeError("Réponse vide de l'API (vérifier le modèle / la période).")
+
+    def col(nom):
+        valeurs = daily.get(nom) or []
+        return valeurs if len(valeurs) == len(dates) else [None] * len(dates)
+
+    tmin, tmax = col("temperature_2m_min"), col("temperature_2m_max")
+    tmoy, pluie = col("temperature_2m_mean"), col("precipitation_sum")
+    return [{"id_commune": id_commune, "date": d, "t_min": a, "t_max": b, "t_moy": m, "precip": p}
+            for d, a, b, m, p in zip(dates, tmin, tmax, tmoy, pluie)]
+
+
 if __name__ == "__main__":
     print("Clé API :", "trouvée → serveurs réservés" if API_KEY else "absente → API gratuite")
     c = recuperer_tmin(43.60, 1.44, "2019-01-01", "2019-12-31")

@@ -248,4 +248,4 @@ if __name__ == "__main__":
         bilan(int(args[1].replace(" ", "")))
     else:
         demonstration(" ".join(args) or
-                      "Explique en quelques phrases ce qu'est un schéma en étoiles en base de données, avec un exemple simple.")
+                      "Explique en quelques phrases comment on fait pour extraire des données d'un fichier CSV sur ma base de données PhpMyAdmin et les insérer dans une table SQL.")

@@ -19,12 +19,10 @@ Règles de calcul (justifiées dans le rapport) :
   bilan hydrique    = Σ (precip − ET0) sur la saison
   agrégation        : valeur par année de campagne, puis MOYENNE sur les années de l'horizon.
 
-Les FENÊTRES (saison de calcul, fenêtre de gel sensible) sont des HYPOTHÈSES D'ÉQUIPE,
-regroupées dans PARAMS_CULTURE ci-dessous : faciles à lire, à discuter, à modifier.
 """
 import math
 from collections import defaultdict
-
+ 
 DEFAUT = {"saison": (4, 10), "gel": (3, 5), "plafond_tx": None}
 PARAMS_CULTURE = {
     "Blé tendre hiver":       {"saison": (10, 7), "gel": (3, 5), "plafond_tx": None},
@@ -33,25 +31,20 @@ PARAMS_CULTURE = {
     "Maïs grain":             {"saison": (4, 10), "gel": (4, 5), "plafond_tx": 30.0},
     "Vigne (raisin de cuve)": {"saison": (4, 10), "gel": (3, 5), "plafond_tx": None},
 }
-
-
+ 
+ 
 def params(culture):
     p = dict(DEFAUT)
     p.update(PARAMS_CULTURE.get(culture.get("nom"), {}))
     return p
-
-
-# --------------------------------------------------------------------------
-# Briques élémentaires
-# --------------------------------------------------------------------------
+ 
+ 
 def gdd_jour(t_min, t_max, t_base, plafond_tx=None):
-    """Degrés-jours de croissance d'une journée (jamais négatif)."""
     tx = min(t_max, plafond_tx) if plafond_tx is not None else t_max
     return max(0.0, (t_min + tx) / 2.0 - t_base)
-
-
+ 
+ 
 def ra_mm_par_jour(latitude_deg, jour_annee):
-    """Rayonnement extraterrestre Ra en mm/jour (FAO-56, éq. 21) — fiche amorçage DEV."""
     phi = math.radians(latitude_deg)
     dr = 1 + 0.033 * math.cos(2 * math.pi / 365 * jour_annee)
     decl = 0.409 * math.sin(2 * math.pi / 365 * jour_annee - 1.39)
@@ -59,54 +52,48 @@ def ra_mm_par_jour(latitude_deg, jour_annee):
     ra_mj = (24 * 60 / math.pi) * 0.0820 * dr * (
         ws * math.sin(phi) * math.sin(decl) + math.cos(phi) * math.cos(decl) * math.sin(ws))
     return 0.408 * ra_mj
-
-
+ 
+ 
 def et0_hargreaves(t_min, t_max, t_moy, latitude_deg, jour_annee):
-    """ET0 (mm/jour). Vaut 0 si t_max == t_min (racine nulle)."""
     ecart = max(0.0, t_max - t_min)
     return max(0.0, 0.0023 * ra_mm_par_jour(latitude_deg, jour_annee) * (t_moy + 17.8) * math.sqrt(ecart))
-
-
+ 
+ 
 def _parse(date_iso):
     return int(date_iso[0:4]), int(date_iso[5:7]), int(date_iso[8:10])
-
-
+ 
+ 
 def _jour_annee(date_iso):
     an, m, j = _parse(date_iso)
     cumul = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334]
     bissextile = (an % 4 == 0 and an % 100 != 0) or an % 400 == 0
     return cumul[m - 1] + j + (1 if bissextile and m > 2 else 0)
-
-
+ 
+ 
 def annee_campagne(date_iso, fenetre):
-    """Année de campagne si la date est dans la fenêtre (mois_debut, mois_fin), sinon None."""
     an, m, _ = _parse(date_iso)
     d, f = fenetre
     if d <= f:
         return an if d <= m <= f else None
     if m >= d:
-        return an + 1          # ex. 15 nov 2000 -> campagne 2001
+        return an + 1
     if m <= f:
         return an
     return None
-
-
-# --------------------------------------------------------------------------
-# Calcul par année puis par horizon
-# --------------------------------------------------------------------------
+ 
+ 
 def indicateurs_annuels(serie, culture, latitude):
-    """Retourne {annee_de_campagne: {indicateurs de l'année}}."""
     p = params(culture)
     ann = defaultdict(lambda: {"gdd": 0.0, "gel": 0, "stress": 0, "opt": 0,
                                "pluie": 0.0, "bilan": 0.0, "nb_jours": 0})
     for j in serie:
         if j.get("t_min") is None or j.get("t_max") is None:
-            continue                                   # jour inexploitable : ignoré
+            continue
         if j["t_min"] > j["t_max"]:
             raise ValueError(f"t_min > t_max le {j['date']}")
         t_moy = j["t_moy"] if j.get("t_moy") is not None else (j["t_min"] + j["t_max"]) / 2.0
         pluie = j.get("precip") or 0.0
-
+ 
         a_saison = annee_campagne(j["date"], p["saison"])
         if a_saison is not None:
             a = ann[a_saison]
@@ -123,19 +110,50 @@ def indicateurs_annuels(serie, culture, latitude):
         if a_gel is not None and j["t_min"] < culture["seuil_gel_c"]:
             ann[a_gel]["gel"] += 1
     return dict(ann)
-
-
-def indicateurs_horizon(serie, culture, latitude, annee_debut, annee_fin):
-    """Moyenne annuelle sur l'horizon [annee_debut ; annee_fin] -> colonnes de fact_indicateur."""
-    annuels = {a: v for a, v in indicateurs_annuels(serie, culture, latitude).items()
-               if annee_debut <= a <= annee_fin and v["nb_jours"] > 0}
+ 
+ 
+def _dernier_jour(mois):
+    return {1: 31, 2: 29, 3: 31, 4: 30, 5: 31, 6: 30, 7: 31, 8: 31, 9: 30,
+            10: 31, 11: 30, 12: 31}[mois]
+ 
+ 
+def bornes_campagne(culture, annee):
+    """Première et dernière date (ISO) qu'il faut avoir pour que la campagne `annee` soit complète.
+    On prend l'union de la fenêtre de saison et de la fenêtre de gel (ex. vigne : gel dès mars)."""
+    p = params(culture)
+    debuts, fins = [], []
+    for d, f in (p["saison"], p["gel"]):
+        an_debut = annee - 1 if d > f else annee
+        debuts.append((an_debut, d))
+        fins.append((annee, f))
+    an_d, m_d = min(debuts)
+    an_f, m_f = max(fins)
+    return f"{an_d:04d}-{m_d:02d}-01", f"{an_f:04d}-{m_f:02d}-{_dernier_jour(m_f):02d}"
+ 
+ 
+def indicateurs_horizon(serie, culture, latitude, annee_debut, annee_fin, exiger_campagne_complete=True):
+    """Moyenne des indicateurs annuels sur [annee_debut ; annee_fin].
+    Une campagne est ignorée si la série ne couvre pas toute sa fenêtre (contrat §1.2) ;
+    nb_annees_calculees compte les années réellement utilisées."""
+    dates = [j["date"] for j in serie]
+    d_min, d_max = (min(dates), max(dates)) if dates else (None, None)
+ 
+    def utilisable(a, v):
+        if not annee_debut <= a <= annee_fin or v["nb_jours"] <= 0:
+            return False
+        if not exiger_campagne_complete:
+            return True
+        debut, fin = bornes_campagne(culture, a)
+        return d_min <= debut and d_max >= fin
+ 
+    annuels = {a: v for a, v in indicateurs_annuels(serie, culture, latitude).items() if utilisable(a, v)}
     if not annuels:
         raise ValueError("aucune année exploitable sur l'horizon demandé")
     n = len(annuels)
-
+ 
     def moy(cle):
         return sum(v[cle] for v in annuels.values()) / n
-
+ 
     gdd = moy("gdd")
     mat = culture.get("gdd_maturite_cj")
     return {
@@ -148,18 +166,16 @@ def indicateurs_horizon(serie, culture, latitude, annee_debut, annee_fin):
         "bilan_hydrique_mm": round(moy("bilan"), 1),
         "nb_annees_calculees": n,
     }
-
-
+ 
+ 
 def ligne_fait(id_commune, id_culture, id_temps, id_modele, serie, culture, latitude,
                annee_debut, annee_fin, id_session="global"):
-    """Ligne prête à insérer dans fact_indicateur."""
     return {"id_commune": id_commune, "id_culture": id_culture, "id_temps": id_temps,
             "id_modele": id_modele, "id_session": id_session,
             **indicateurs_horizon(serie, culture, latitude, annee_debut, annee_fin)}
-
-
+ 
+ 
 def sql_insert(ligne):
-    """INSERT paramétré (valeurs jamais collées dans le texte SQL : anti-injection)."""
     cols = list(ligne)
     sql = (f"INSERT INTO fact_indicateur ({', '.join(cols)}) "
            f"VALUES ({', '.join(['%s'] * len(cols))}) "

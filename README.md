@@ -1,14 +1,14 @@
-# 🌾 AgriFutur — Climat & Cultures (SAÉ 3.01)
+#  AgriFutur — Climat & Cultures (SAÉ 3.01)
 
 > **Comment le climat de ma commune va-t-il évoluer d'ici 2050, et quelles cultures y resteront viables ?**
 
 Application web qui transforme des **projections climatiques** en **indicateurs agro-climatiques** compréhensibles et actionnables, à l'échelle d'une commune. Projet réalisé dans le cadre de la SAÉ 3.01 du BUT Informatique 2 (IUT de Créteil-Vitry, Université Paris-Est Créteil), année 2026-2027, inspiré de la démarche AgroClimat2050.
 
-⚠️ Il s'agit de **projections, pas de prévisions** : l'application affiche des fourchettes et l'incertitude entre modèles, jamais un chiffre unique présenté comme une certitude.
+ATTENTION : Il s'agit de **projections, pas de prévisions** : l'application affiche des fourchettes et l'incertitude entre modèles, jamais un chiffre unique présenté comme une certitude.
 
 ---
 
-## 🎯 Fonctionnalités
+##  Fonctionnalités
 
 - Choisir une **commune** (16 communes de référence), une **culture** (10 cultures sourcées) et un **horizon** (aujourd'hui → 2050)
 - Obtenir un **verdict** : Viable / À risque / Non viable
@@ -17,7 +17,7 @@ Application web qui transforme des **projections climatiques** en **indicateurs 
 - Voir l'évolution du climat de 1950 à 2050 et le décalage des zones de culture
 - Compte utilisateur facultatif (favoris), conforme au RGPD
 
-## 🧱 Architecture
+##  Architecture
 
 ```
 Open-Meteo Climate API ──(séries brutes, non stockées)──┐
@@ -37,7 +37,7 @@ Open-Meteo Climate API ──(séries brutes, non stockées)──┐
 - **Contrat d'interface** DEV ↔ DATA : voir [`CONTRAT-INTERFACE.md`](CONTRAT-INTERFACE.md)
 - Le pôle **DEV** produit les séries, le pôle **DATA** produit les faits
 
-## 🛠️ Technologies
+##  Technologies
 
 | Domaine | Choix |
 |---|---|
@@ -48,7 +48,7 @@ Open-Meteo Climate API ──(séries brutes, non stockées)──┐
 | Hébergement | AlwaysData |
 | Versionnage | Git / GitHub |
 
-## 📁 Structure du dépôt
+##  Structure du dépôt
 
 | Élément | Contenu |
 |---|---|
@@ -59,7 +59,7 @@ Open-Meteo Climate API ──(séries brutes, non stockées)──┐
 | `17-poc-empreinte-ia.py` | Estimation de l'empreinte environnementale de l'usage de l'IA |
 | `Trace Ecrite Commun SAE3.01.pdf` | Analyse du besoin, personas, backlog MoSCoW |
 
-## 🚀 Lancer le projet en local
+##  Lancer le projet en local
 
 ```bash
 # 1. Cloner le dépôt
@@ -81,7 +81,7 @@ python test_indicateurs.py
 
 > Les chemins exacts dépendent de l'emplacement des fichiers dans les dossiers `Partie DATA` / `Partie DEV`.
 
-## 📅 Avancement
+##  Avancement
 
 | Jalon | Semaines | Contenu | État |
 |---|---|---|---|
@@ -98,7 +98,7 @@ Chaque jalon est publié dans l'onglet **Releases** (tags `Jalon-1`, `Jalon-2`�
 
 L'IA est utilisée comme copilote, jamais comme source. Tout usage significatif est tracé dans `JOURNAL-IA.md` et son empreinte environnementale est estimée avec `17-poc-empreinte-ia.py`. Les clés d'API ne sont jamais versionnées (`.env` est dans le `.gitignore`).
 
-## 👥 Équipe (groupe 5)
+##  Équipe (groupe 5)
 
 | Membre | Pôle |
 |---|---|
@@ -109,7 +109,7 @@ L'IA est utilisée comme copilote, jamais comme source. Tout usage significatif 
 | Adrien Garrigon-Viramoutou | DEV |
 | Thenujan Nanthakumar | DEV |
 
-## 📚 Sources
+##  Sources
 
 - [Open-Meteo Climate API](https://open-meteo.com/en/docs/climate-api)
 - [DRIAS – Météo-France](https://www.drias-climat.fr/)

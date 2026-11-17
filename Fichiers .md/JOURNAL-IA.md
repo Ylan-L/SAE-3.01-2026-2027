@@ -34,8 +34,10 @@
 ## Journal
 
 | Date | Équipier | Outil/modèle | Tâche / contexte | Prompt (résumé) | Sortie IA | Gardé/modifié/rejeté | Justification (vérif. / correction / test) | Tokens (≈) |
+|---|---|---|---|---|---|---|---|---|
 | 05/10/2026 | Adam | Haiku 4.5 | Test de la clé A et du script d'empreinte Explique en 3 phrases ce qu'est une base de données relationnelle | (question par défaut du script) | Définition d'une BDD relationnelle | **rejeté** (juste un test, pas intégré au projet) | Vérifié que la clé est bien vue et que le comptage de tokens s'affiche | 172 |
 | 12/10/2026 | Adam | Haiku 4.5 | Comprendre le schéma en étoile avant de modéliser la BDD (SAÉ) | « Explique en quelques phrases ce qu'est un schéma en étoile, avec un exemple simple » | Définition (table de faits centrale + tables de dimensions) et exemple d'une boutique : faits = ventes ; dimensions = produit, temps, client, magasin ; schéma exemple | **gardé** (compris, non copié dans le livrable) | Comparé à quelque recherche que j'ai fait ; je vais relié cela à notre propre schéma (dim_commune, dim_culture, Fact_Indicateur) pour vérifier que j'ai compris le rôle de chaque table | 336 |
+| 17/11/2026 | Adam | Haiku 4.5 (API, script poc-empreinte-ia.py) | Savoir écrire et lancer un SELECT dans phpMyAdmin pour la base bddsae_agri | « Explique-moi en quelques phrases comment faire un SELECT sur phpMyAdmin » | Deux méthodes (interface graphique « Parcourir », onglet SQL) avec des exemples génériques (`ma_table`, `utilisateurs`) | **gardé** (compris, exemples non copiés tels quels) | [À CONFIRMER avant rendu : testé un SELECT dans l'onglet SQL sur bddsae_agri (ex. `SELECT * FROM dim_commune`) ; exemples génériques adaptés à nos tables.] | 317 (entrée 26 / sortie 291) |
 
 
 *(Ajoutez autant de lignes que nécessaire — notamment celles des autres membres de l'équipe.)*

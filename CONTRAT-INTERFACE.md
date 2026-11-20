@@ -1,6 +1,8 @@
 # Contrat d'interface DEV ↔ DATA — projet « Climat & Cultures »
 
-> Brouillon proposé par le pôle DATA à valider avec le pôle DEV (livrable commun J2).
+**Version :** 1.0 — **Date :** 20/11/2026 — **Statut :** proposé par DATA, à valider par DEV (3 points ouverts en section 4)
+
+**Historique :** v1.0 (20/11/2026) : première version versionnée ; format de l'échantillon vérifié (5 116 lignes, colonnes id_commune, date, t_min, t_max, t_moy, precip).
 
 ## 1. DEV → DATA : la série climatique (1 jour = 1 ligne)
 

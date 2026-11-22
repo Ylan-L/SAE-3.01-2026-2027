@@ -32,3 +32,6 @@ INSERT INTO dim_commune (id_commune, code_insee, nom_commune, latitude, longitud
 
 SELECT COUNT(*) AS nb_cultures FROM dim_culture;  -- attendu : 10
 SELECT COUNT(*) AS nb_communes FROM dim_commune;  -- attendu : 16
+
+
+

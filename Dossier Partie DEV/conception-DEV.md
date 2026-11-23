@@ -1,6 +1,6 @@
 # Document de conception — Pôle DEV — Équipe 5 « AgriFutur »
 
-SAÉ 3.01 « Climat & Cultures » · Jalon 2 · version 2 · pôle DEV, équipe 5
+SAÉ 3.01 « Climat & Cultures » · Jalon 2 · version 3 · pôle DEV, équipe 5
 Complète le **CONTRAT-INTERFACE.md** (DEV ↔ DATA) : ce document dit comment DEV le met en œuvre.
 
 ## 1. L'application en bref
@@ -31,17 +31,18 @@ Un utilisateur choisit une **commune**, une **culture**, un **horizon** et lit u
 
 **Grille** : 16 communes × 10 cultures × 2 horizons × 2 modèles = 640 lignes de `fact_indicateur`. Les cultures partagent la même série : il suffit de **32 séries** (commune × modèle).
 
-**Une série** (contrat §1) : `id_commune, date, t_min, t_max, t_moy, precip`, un jour par ligne, de 1991 à 2050 (« DEV passe la série entière, DATA filtre »). Le client la demande en **2 tranches de 30 ans** (= les 2 horizons de `dim_temps`), chacune mise en cache. Les 4 variables sont dans un seul appel ; `disable_bias_correction` n'est jamais envoyé ; le modèle vient de `dim_modele.code_api`.
+**Une série** (contrat §2) : `id_commune, date, t_min, t_max, t_moy, precip`, un jour par ligne, de 1991 à 2050 (« DEV passe la série entière, DATA filtre »), en démarrant le **1er juillet de `annee_debut-1`** (donc le 1er juillet 1990), comme l'échantillon réel, pour couvrir la saison de gel qui chevauche deux années. Le client la demande en **2 tranches de 30 ans** (1990-07-01 → 2020-12-31, puis 2021-01-01 → 2050-12-31, qui couvrent les 2 horizons de `dim_temps`), chacune mise en cache. Les 4 variables sont dans un seul appel ; `disable_bias_correction` n'est jamais envoyé ; le modèle vient de `dim_modele.code_api`.
 
 **Quota** : environ 1 600 appels pondérés par série, soit ~50 000 pour la grille, au-delà des 10 000 par jour et par IP de l'API gratuite. Il faut donc la **clé Moodle** (serveurs sans limite par IP) ou étaler sur plusieurs jours : le cache permet de reprendre où l'on s'était arrêté.
 
-**Erreurs** (alignées sur le contrat §1) :
+**Erreurs** (alignées sur le contrat §2 et §4) :
 
 | Cas | Réaction |
 |---|---|
 | 429 (quota) | 4 tentatives espacées (kit), puis arrêt propre ; la reprise repart du cache |
 | API injoignable | arrêt de la série concernée, journalisé |
-| Modèle qui renvoie du vide (réponse vide, variable absente) | `RuntimeError` → on signale le modèle (`dim_modele.actif = FALSE`) |
+| Modèle qui renvoie du vide (réponse vide) | `RuntimeError` → on signale le modèle (`dim_modele.actif = FALSE`) |
+| Variable absente ou longueur incohérente | colonne laissée à `None` (DATA ignore le jour, comme une valeur manquante) |
 | `t_min > t_max` | comptés (`jours_incoherents`) et signalés à DATA, qui lève l'erreur |
 | Valeur manquante | laissée à `None` ; DATA ignore le jour (`precip` manquante = 0) |
 | Paramètres invalides | refusés avant tout appel réseau |
@@ -50,13 +51,14 @@ Un utilisateur choisit une **commune**, une **culture**, un **horizon** et lit u
 
 | Point du contrat | Mise en œuvre DEV |
 |---|---|
-| §1 série DEV → DATA | `series_contrat.recuperer_series(...)` (11 + 2 tests hors ligne) |
-| §2 module de calcul | `ligne_fait(...)` puis `sql_insert(...)` ; `annee_debut/annee_fin` = bornes de `dim_temps` ; `id_session = "global"` |
+| §2 série DEV → DATA | `series_contrat.recuperer_series(...)` (12 tests hors ligne), au-dessus de `openmeteo_client.recuperer_serie(...)` (9 tests hors ligne) ; on passe `resultat["lignes"]` à DATA |
+| §3 module de calcul | `ligne_fait(...)` puis `sql_insert(...)` ; `annee_debut/annee_fin` = bornes de `dim_temps` ; `id_session = "global"` |
 | §3 lecture des faits | la requête du contrat, exécutée avec des paramètres séparés ; jamais de SQL concaténé |
-| ET0 | non fournie par l'API : estimée par DATA (Hargreaves) |
+| ET0 | estimée par DATA (Hargreaves) ; le champ `et0_fao_evapotranspiration_sum` répond en mm mais n'est pas utilisé tant que DATA n'a pas contrôlé ses valeurs |
 
-**Points « À valider ensemble » du contrat : proposition DEV**
+**Points « À valider ensemble » du contrat (devenus §5 « Choix retenus ensemble » en v1.0) : proposition DEV**
 - **Modèles** : `MRI_AGCM3_2_S` (recommandé par l'énoncé, le plus riche en variables) et `CMCC_CM2_VHR4` (institution européenne différente, résolution proche : 30 km contre 20 km, ce qui rend l'écart entre modèles attribuable au modèle plutôt qu'à la maille). DEV vérifie qu'ils renvoient des données avant usage (T3) ; DATA juge leur plausibilité.
+Vérifié le 23/11/2026 pour Lille (2019-07-01 → 2020-12-31) : les deux modèles renvoient 550 jours, sans valeur manquante ni jour `t_min > t_max` (preuves : `preuves/sortie-T9.txt` et `preuves/sortie-modele-CMCC.txt`).
 - **Alimentation** : pré-calcul de toute la grille (section 2). C'est le choix DEV parmi les deux options laissées ouvertes par le contrat.
 - **`id_session`** : valeur `"global"` au MVP (pas de comptes) ; la question de l'identité se repose en version 2.
 
@@ -70,7 +72,7 @@ Un utilisateur choisit une **commune**, une **culture**, un **horizon** et lit u
 | Évolution du climat | comparaison 1991-2020 → 2021-2050 par indicateur | mêmes faits |
 | Erreur / attente | message selon le cas | — |
 
-Routes : `/`, `/explorer`, `/resultat?commune=&culture=`, `/evolution?commune=`, `/methodologie`. Entrées validées (listes blanches). Les pages de la maquette sont dans `site/projet_1/` (branche `dev-thenujan`) et servent de gabarits.
+Routes : `/`, `/explorer`, `/resultat?commune=&culture=`, `/evolution?commune=`, `/methodologie`. Entrées validées (listes blanches). Les pages de la maquette (`SAE301_Code_maquette/`, header et footer communs dans `layout.js`) servent de gabarits : `layout.js` devient `base.html` (Jinja) au sprint 1.
 
 **Règles d'affichage** (contrat §3 et fiche maquette) : montrer d'abord l'**évolution** entre les deux horizons, puis une réserve sur la valeur brute (les modèles sous-estiment le gel) ; « projection » et jamais « prévision » ; fourchette entre modèles ; source des seuils visible ; jamais la couleur seule ; responsive.
 La courbe année par année est « Souhaitable » : elle demande les séries, hors du pré-calcul.
@@ -86,17 +88,19 @@ La courbe année par année est « Souhaitable » : elle demande les séries, ho
 | N° | Cas | Entrée → attendu | Auto/manuel | Statut |
 |---|---|---|---|---|
 | T1 | Format du contrat | réponse simulée → 6 colonnes dans l'ordre, valeurs manquantes comptées | auto | fait |
-| T2 | Série entière | 1991-2050 → 2 appels (1991-2020, 2021-2050), lignes concaténées sans doublon | auto | fait |
-| T3 | Réponses inexploitables | vide, variable vide, longueurs incohérentes → `RuntimeError` | auto | fait |
+| T2 | Série entière | 1991-2050 → 2 appels (1990-07-01 → 2020-12-31, puis 2021-01-01 → 2050-12-31), lignes concaténées sans doublon | auto | fait |
+| T3 | Réponses inexploitables | réponse vide → `RuntimeError` ; variable absente ou longueurs incohérentes → colonne à `None` | auto | fait |
 | T4 | Paramètres invalides | latitude, date, bornes, période > 61 ans, modèle vide → refus sans appel réseau | auto | fait |
 | T5 | `t_min > t_max` | → compté dans `jours_incoherents` | auto | fait |
 | T6 | Calcul des indicateurs | `series_test.csv` → valeurs attendues de DATA | auto (`test_indicateurs.py`) | fait (DATA) |
-| T7 | Cache | même requête 2 fois → 1 seul appel API | manuel | à faire |
-| T8 | Quota 429 | API simulée → tentatives puis arrêt propre | auto | à faire |
-| T9 | Échantillon réel | 1 commune, 1 an → fichier au contrat, taux de manquants noté | manuel | à faire |
+| T7 | Cache | même requête 2 fois → 1 seul appel API | auto (`test_openmeteo_client.py`) | fait |
+| T8 | Quota 429 | API simulée → 4 tentatives espacées (5, 15, 30 s) puis `RuntimeError`, rien écrit en cache | auto (`test_openmeteo_client.py`) | fait |
+| T9 | Échantillon réel | 1 commune (Lille), 1 an → fichier au contrat, taux de manquants noté (`exemple_appel_reel.py`) : 550 jours (2019-07-01 → 2020-12-31), 0 jour `t_min > t_max`, 0 % de valeurs manquantes sur les 4 colonnes | manuel | fait |
 | T10 | Route `/resultat` | commune inconnue → erreur 400 | auto | à faire |
 | T11 | Parcours IHM | Accueil → Choisir → Résultat avec mention « projection » | manuel | à faire |
 | T12 | Déploiement | URL AlwaysData : accueil + un résultat | manuel | à faire |
+
+**Preuves d'exécution.** Les tests T1 à T5, T7 et T8 se lancent hors ligne (sans clé ni réseau) depuis le dossier du client : `python -m unittest -v`. La sortie complète est conservée dans `preuves/sortie-tests-client.txt`, jointe au rendu. T9 reste manuel : `python exemple_appel_reel.py`, avec le nombre de jours obtenus et le taux de valeurs manquantes notés.
 
 ## 8. Risques principaux
 
@@ -106,4 +110,4 @@ La courbe année par année est « Souhaitable » : elle demande les séries, ho
 | Flask sur AlwaysData non testé | déploiement de test avant la fin du J2 |
 | Modèle sans données | contrôle avant usage (T3), `actif = FALSE` |
 | Fenêtres de saison de plusieurs cultures non sourcées (hypothèses d'équipe) | validation par DATA en J2.4, fiabilité affichée |
-| Pages de la maquette sur la branche `dev-thenujan`, pas encore dans `main` | fusion avant l'intégration |
+| Header et footer en JavaScript (`layout.js`), pas de gabarit serveur | conversion en `base.html` (Jinja) au sprint 1 |

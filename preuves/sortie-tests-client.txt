@@ -1,0 +1,26 @@
+test_meme_requete_un_seul_appel (test_openmeteo_client.TestCache.test_meme_requete_un_seul_appel) ... ok
+test_requete_differente_nouvel_appel (test_openmeteo_client.TestCache.test_requete_differente_nouvel_appel) ... ok
+test_colonnes_et_valeurs_exactes (test_openmeteo_client.TestFormatContrat.test_colonnes_et_valeurs_exactes) ... ok
+test_longueur_incoherente_donne_des_none (test_openmeteo_client.TestFormatContrat.test_longueur_incoherente_donne_des_none) ... ok
+test_variable_absente_donne_des_none (test_openmeteo_client.TestFormatContrat.test_variable_absente_donne_des_none) ... ok
+test_arret_propre_apres_4_tentatives (test_openmeteo_client.TestQuota429.test_arret_propre_apres_4_tentatives) ... ok
+test_autre_erreur_http_remonte_sans_retry (test_openmeteo_client.TestQuota429.test_autre_erreur_http_remonte_sans_retry) ... ok
+test_reprise_apres_un_429 (test_openmeteo_client.TestQuota429.test_reprise_apres_un_429) ... ok
+test_reponses_vides (test_openmeteo_client.TestReponsesVides.test_reponses_vides) ... ok
+test_colonnes_dans_l_ordre_et_valeurs_manquantes_comptees (test_series_contrat.TestT1FormatContrat.test_colonnes_dans_l_ordre_et_valeurs_manquantes_comptees) ... ok
+test_deux_appels_de_30_ans (test_series_contrat.TestT2SerieEntiere.test_deux_appels_de_30_ans) ... ok
+test_doublons_supprimes_entre_tranches (test_series_contrat.TestT2SerieEntiere.test_doublons_supprimes_entre_tranches) ... ok
+test_modele_transmis_au_client (test_series_contrat.TestT2SerieEntiere.test_modele_transmis_au_client) ... ok
+test_tranches (test_series_contrat.TestT2SerieEntiere.test_tranches) ... ok
+test_une_annee_commence_le_1er_juillet_precedent (test_series_contrat.TestT2SerieEntiere.test_une_annee_commence_le_1er_juillet_precedent) ... ok
+test_une_seule_annee_un_seul_appel (test_series_contrat.TestT2SerieEntiere.test_une_seule_annee_un_seul_appel) ... ok
+test_api_injoignable_journalisee_puis_runtimeerror (test_series_contrat.TestT3ReponsesInexploitables.test_api_injoignable_journalisee_puis_runtimeerror) ... ok
+test_reponse_vide_remonte_en_runtimeerror (test_series_contrat.TestT3ReponsesInexploitables.test_reponse_vide_remonte_en_runtimeerror) ... ok
+test_periode_de_61_ans_acceptee (test_series_contrat.TestT4ParametresInvalides.test_periode_de_61_ans_acceptee) ... ok
+test_refus_sans_appel_reseau (test_series_contrat.TestT4ParametresInvalides.test_refus_sans_appel_reseau) ... ok
+test_t_min_superieur_a_t_max_compte (test_series_contrat.TestT5Incoherences.test_t_min_superieur_a_t_max_compte) ... ok
+
+----------------------------------------------------------------------
+Ran 21 tests in 0.028s
+
+OK

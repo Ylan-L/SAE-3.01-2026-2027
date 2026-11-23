@@ -1,0 +1,9 @@
+Jours récupérés : 550 | de 2019-07-01 à 2020-12-31
+Première ligne  : {'id_commune': 1, 'date': '2019-07-01', 't_min': 15.2, 't_max': 20.5, 't_moy': 17.9, 'precip': 1.65}
+Colonnes conformes au contrat : True
+Dates uniques   : True
+Jours t_min > t_max : 0
+Manquants t_min  : 0 (0.0 %)
+Manquants t_max  : 0 (0.0 %)
+Manquants t_moy  : 0 (0.0 %)
+Manquants precip : 0 (0.0 %)

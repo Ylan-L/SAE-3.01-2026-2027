@@ -90,12 +90,12 @@ La courbe année par année est « Souhaitable » : elle demande les séries, ho
 | T1 | Format du contrat | réponse simulée → 6 colonnes dans l'ordre, valeurs manquantes comptées | auto | fait |
 | T2 | Série entière | 1991-2050 → 2 appels (1990-07-01 → 2020-12-31, puis 2021-01-01 → 2050-12-31), lignes concaténées sans doublon | auto | fait |
 | T3 | Réponses inexploitables | réponse vide → `RuntimeError` ; variable absente ou longueurs incohérentes → colonne à `None` | auto | fait |
-| T4 | Paramètres invalides | latitude, date, bornes, période > 61 ans, modèle vide → refus sans appel réseau | auto | fait |
+| T4 | Paramètres invalides | paramètres hors des valeurs autorisées (coordonnées, années/bornes, durée de période ou modèle vide) → refus sans appel réseau | auto | fait |
 | T5 | `t_min > t_max` | → compté dans `jours_incoherents` | auto | fait |
 | T6 | Calcul des indicateurs | `series_test.csv` → valeurs attendues de DATA | auto (`test_indicateurs.py`) | fait (DATA) |
 | T7 | Cache | même requête 2 fois → 1 seul appel API | auto (`test_openmeteo_client.py`) | fait |
 | T8 | Quota 429 | API simulée → 4 tentatives espacées (5, 15, 30 s) puis `RuntimeError`, rien écrit en cache | auto (`test_openmeteo_client.py`) | fait |
-| T9 | Échantillon réel | 1 commune (Lille), 1 an → fichier au contrat, taux de manquants noté (`exemple_appel_reel.py`) : 550 jours (2019-07-01 → 2020-12-31), 0 jour `t_min > t_max`, 0 % de valeurs manquantes sur les 4 colonnes | manuel | fait |
+| T9 | Échantillon réel | 1 commune (Lille), 18 mois → fichier au contrat, taux de manquants noté (`exemple_appel_reel.py`) : 550 jours (2019-07-01 → 2020-12-31), 0 jour `t_min > t_max`, 0 % de valeurs manquantes sur les 4 colonnes | manuel | fait |
 | T10 | Route `/resultat` | commune inconnue → erreur 400 | auto | à faire |
 | T11 | Parcours IHM | Accueil → Choisir → Résultat avec mention « projection » | manuel | à faire |
 | T12 | Déploiement | URL AlwaysData : accueil + un résultat | manuel | à faire |

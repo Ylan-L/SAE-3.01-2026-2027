@@ -1,159 +1,85 @@
-# -*- coding: utf-8 -*-
-"""
-💻 DEV — Client de l'API Open-Meteo Climate (les SÉRIES, via API, non stockées).
+# Contrat d'interface DEV ↔ DATA — « Climat & Cultures »
+ 
+**Version :** 1.1 — **Date :** 23/11/2026 — **Statut :** v1.0 validée par les pôles DEV et DATA ; correction v1.1 proposée par DEV, à valider par DATA
+ 
+**Historique :**
+- v1.0 (20/11/2026) : première version versionnée. Format vérifié sur l'échantillon réel (5 116 lignes). Toute modification du format passe à 1.1 (compatible) ou 2.0 (qui casse la compatibilité), avec une ligne ici.
+- v1.1 (23/11/2026) : correction compatible, le format de la série ne change pas. L'ordre réel des arguments de `recuperer_serie` est `date_debut, date_fin, modele` (il était écrit `modele, date_debut, date_fin`), et la période demandée est précisée (du 1er juillet de `annee_debut-1` au 31 décembre de `annee_fin`).
+---
+ 
+## 1. En une image
+ 
+```
+Open-Meteo ──► [DEV] client API ──► SÉRIE (1 jour = 1 ligne) ──► [DATA] calcul ──► FAITS ──► base ──► [DEV] application
+```
+ 
+- **DEV produit les séries** (via l'API, jamais depuis le navigateur) et affiche les résultats.
+- **DATA produit les faits** : les indicateurs calculés (jours de gel, GDD…), stockés dans `fact_indicateur`.
+- Ce contrat fixe ce qui passe de l'un à l'autre : **le format de la série** (DEV → DATA) et **les deux fonctions d'échange**.
+## 2. DEV → DATA : la série climatique
+ 
+Une série = **une commune × un modèle**, **un jour par ligne**, avec ces 6 champs :
+ 
+| Champ | Type | Unité / format | Règle |
+|---|---|---|---|
+| `id_commune` | entier | clé de `dim_commune` | obligatoire |
+| `date` | texte | `YYYY-MM-DD` | obligatoire, une seule ligne par jour et par commune |
+| `t_min` | décimal | °C | `temperature_2m_min` ; vide (`null`) si absent |
+| `t_max` | décimal | °C | `temperature_2m_max` ; normalement ≥ `t_min` ; toute incohérence est signalée dans `jours_incoherents` |
+| `t_moy` | décimal | °C | `temperature_2m_mean` (si absent, DATA calcule (t_min+t_max)/2) |
+| `precip` | décimal | mm | `precipitation_sum` ; vide traité comme 0 |
+ 
+Exemple (une ligne) : `1,2000-07-01,8.6,19.1,14.5,0.09` (Lille, 1er juillet 2000).
+ 
+**Ce que DEV livre :**
+- une fonction **`recuperer_serie(id_commune, latitude, longitude, date_debut, date_fin, modele)`** qui renvoie la **liste de dictionnaires** `{id_commune, date, t_min, t_max, t_moy, precip}` (le modèle vient de `dim_modele.code_api`, jamais écrit en dur) ; la période demandée va du **1er juillet de `annee_debut-1`** au **31 décembre de `annee_fin`**, pour couvrir la saison de gel qui chevauche deux années (comme l'échantillon réel) ; le module `series_contrat.recuperer_series(id_commune, latitude, longitude, annee_debut, annee_fin, modele)` découpe cette période en tranches de 30 ans et renvoie un dictionnaire dont la clé `lignes` est cette liste, avec `jours_incoherents` et `valeurs_manquantes` ;
+- les erreurs claires (API en erreur, réponse vide, timeout) : DEV les signale, DATA n'a pas à les deviner ;
+- le **cache** et les nouvelles tentatives en cas de limite de débit (quota gratuit : 10 000 appels par jour et par adresse IP).
+**Fichiers d'exemple pour tester sans l'API :**
+- `Dossier Partie DEV/series-reel-MRI_AGCM3_2_S.csv` : échantillon **réel** (Lille et Reims, modèle MRI_AGCM3_2_S, 01/07/2000-31/12/2003 et 01/07/2040-31/12/2043), produit par `exporter_échantillons(DEV).py` ;
+- `Dossier Partie DATA/series_test.csv` : jeu **synthétique** dont les résultats sont connus d'avance.
+## 3. DATA → DEV : le module de calcul et les faits
+ 
+**Calculer et enregistrer un fait :**
+```python
+from indicateurs import ligne_fait, sql_insert
+ligne = ligne_fait(id_commune, id_culture, id_temps, id_modele,
+                   serie, culture, latitude, annee_debut, annee_fin, id_session="global")
+sql, params = sql_insert(ligne)       # INSERT paramétré (anti-injection)
+cursor.execute(sql, params)
+```
+- `serie` : la liste de la section 2 ; `culture` : la ligne de `dim_culture` (dictionnaire) ; `latitude` : celle de `dim_commune`.
+- `annee_debut` / `annee_fin` : les bornes de la période de `dim_temps`. DEV passe la série entière, DATA filtre les années.
+**Lire les faits (pour l'affichage) :**
+```sql
+SELECT c.nom_commune, k.nom AS culture, t.libelle AS horizon, m.code_api AS modele,
+       f.gdd_saison_cj, f.maturite_atteinte_pct, f.jours_gel, f.jours_stress_thermique,
+       f.jours_t_optimale, f.pluie_saison_mm, f.bilan_hydrique_mm, f.nb_annees_calculees
+FROM fact_indicateur f
+JOIN dim_commune c ON c.id_commune = f.id_commune
+JOIN dim_culture k ON k.id_culture = f.id_culture
+JOIN dim_temps   t ON t.id_temps   = f.id_temps
+JOIN dim_modele  m ON m.id_modele  = f.id_modele
+WHERE f.id_commune = %s AND f.id_culture = %s AND f.id_session IN ('global', %s)
+ORDER BY t.annee_debut, m.code_api;
+```
+Les paramètres sont toujours passés séparément, jamais collés dans le texte SQL. Pour l'affichage : comparer `1991-2020` et `2021-2050` pour montrer l'**évolution**, avec une réserve sur la valeur brute (les modèles peuvent sous-estimer le gel) et, dès qu'on a 2 modèles, la **fourchette** entre eux.
+ 
+## 4. Règles communes
+ 
+- **Jour de gel :** `t_min < seuil_gel_c` (strict). Une journée exactement au seuil n'est pas un gel (voir `Décisions_data.md`).
+- **Valeur manquante :** un jour sans `t_min` ou sans `t_max` est ignoré ; une pluie manquante compte pour 0.
+- **Incohérence :** un jour avec `t_min > t_max` est comptabilisé et signalé par DEV dans `jours_incoherents` ; DATA déclenche une erreur de contrôle et la ligne doit être examinée avant son insertion.
+- **ET0 :** elle n'est pas dans la série. DATA l'estime par Hargreaves. Le champ `et0_fao_evapotranspiration` de l'API renvoie `null` ; `et0_fao_evapotranspiration_sum` donne des millimètres, mais ses valeurs paraissent plus élevées : on ne l'utilise pas tant qu'elles ne sont pas contrôlées.
+- **Projection ≠ prévision :** les chiffres sont des projections de modèles, donc incertains. L'application les présente avec nuance.
+## 5. Choix retenus ensemble
+ 
+| Sujet | Choix | Pourquoi |
+|---|---|---|
+| **Modèles** | `MRI_AGCM3_2_S` (repère) et `CMCC_CM2_VHR4` ; `MPI_ESM1_2_XR` en option | 2 familles différentes (atmosphère seule / couplé) ; l'énoncé demande au moins 2 modèles. `EC_Earth3P_HR` reste écarté (`actif = FALSE`) tant qu'on n'a pas revérifié ses données. |
+| **Alimentation** | Pré-calcul de la grille (16 communes × 10 cultures × 2 horizons × modèles retenus), `id_session = 'global'` | L'application lit seulement la base : pas d'appel à l'API à l'affichage, donc pas de problème de quota. Le calcul à la demande viendra plus tard. |
+| **Identité** | `id_session` anonyme fourni par DEV ; pas de comptes pour cette version | Conforme au backlog et à la conception RGPD ; `id_session` sert à isoler et à effacer les données d'un visiteur. |
 
-VERSION ALLÉGÉE : on ne récupère que la température minimale (suffisant pour
-l'indicateur « jours de gel »). Avec mise en cache disque + nouvelle tentative
-si l'API limite le débit (HTTP 429).
-"""
-import os
-import json
-import time
-import hashlib
-import urllib.parse
-import urllib.request
-import urllib.error
+## 6. Test de conformité (à refaire à chaque changement de format)
 
-BASE_URL = "https://climate-api.open-meteo.com/v1/climate"
-# Observations passées (réanalyse ERA5) : sert à vérifier qu'un modèle est plausible
-# sur une période où l'on sait ce qui s'est réellement passé.
-ARCHIVE_URL = "https://archive-api.open-meteo.com/v1/archive"
-CACHE_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data", "cache")
-
-# 🔑 CLÉ API (facultative). Sans clé : API gratuite, limitée à 10 000 appels par jour
-#    et PAR ADRESSE IP — toute la salle partage la même. Avec la clé fournie sur Moodle :
-#    serveurs réservés (adresses préfixées « customer- »), sans cette limite par IP.
-#    La clé se range dans le fichier .env, à côté de ce script :
-#        OPENMETEO_API_KEY=la_cle_fournie_sur_moodle
-#    JAMAIS dans le code : .env est exclu de Git par le .gitignore du kit.
-#    Si la clé est absente, invalide ou expirée, le client repasse tout seul sur l'API
-#    gratuite : l'application continue de fonctionner.
-DOSSIER = os.path.dirname(os.path.abspath(__file__))
-
-
-def _lire_cle():
-    """La clé vient de l'environnement, sinon du fichier .env du kit (sans dépendance)."""
-    cle = os.environ.get("OPENMETEO_API_KEY", "").strip()
-    chemin = os.path.join(DOSSIER, ".env")
-    if not cle and os.path.exists(chemin):
-        with open(chemin, encoding="utf-8-sig") as f:
-            for ligne in f:
-                nom, _, valeur = ligne.partition("=")
-                if nom.strip() == "OPENMETEO_API_KEY":
-                    cle = valeur.strip().strip("\"'")
-    return cle or None
-
-
-API_KEY = _lire_cle()
-
-
-def _url_client(base_url):
-    """https://climate-api.open-meteo.com/… → https://customer-climate-api.open-meteo.com/…"""
-    return base_url.replace("https://", "https://customer-", 1)
-
-
-def _refus_de_cle(erreur):
-    """Vrai si l'API refuse la CLÉ (invalide, expirée) — et non les paramètres."""
-    if erreur.code not in (400, 401, 403):
-        return False
-    try:
-        raison = json.loads(erreur.read().decode("utf-8")).get("reason", "")
-    except Exception:
-        return False
-    return "api key" in raison.lower()
-
-# ⚠️ Open-Meteo applique PAR DÉFAUT une correction de biais (recalage sur ERA5-Land).
-#    Ne passez jamais disable_bias_correction=true : vos modèles ne seraient plus
-#    comparables entre eux, ni avec la réalité.
-
-
-def _chemin_cache(params, base_url=BASE_URL):
-    empreinte = dict(params)
-    if base_url != BASE_URL:            # l'URL n'entre dans la clé que si elle change :
-        empreinte["_url"] = base_url    # les caches déjà constitués restent valables
-    cle = hashlib.md5(json.dumps(empreinte, sort_keys=True).encode()).hexdigest()
-    return os.path.join(CACHE_DIR, cle + ".json")
-
-
-def en_cache(params, base_url=BASE_URL):
-    """Vrai si la réponse est déjà sur le disque : l'appel ne coûtera rien au quota."""
-    return os.path.exists(_chemin_cache(params, base_url))
-
-
-def _appel_api(params, base_url=BASE_URL):
-    """Appelle l'API (avec cache disque + retry sur 429).
-    La clé n'entre PAS dans la clé du cache : même réponse avec ou sans clé."""
-    global API_KEY
-    os.makedirs(CACHE_DIR, exist_ok=True)
-    chemin = _chemin_cache(params, base_url)
-    if os.path.exists(chemin):
-        with open(chemin, encoding="utf-8") as f:
-            return json.load(f)
-
-    for attente in (0, 5, 15, 30):                 # patiente puis réessaie si 429
-        if attente:
-            time.sleep(attente)
-        if API_KEY:
-            url = _url_client(base_url) + "?" + urllib.parse.urlencode({**params, "apikey": API_KEY})
-        else:
-            url = base_url + "?" + urllib.parse.urlencode(params)
-        try:
-            with urllib.request.urlopen(url, timeout=60) as rep:
-                donnees = json.load(rep)
-            with open(chemin, "w", encoding="utf-8") as f:
-                json.dump(donnees, f)
-            return donnees
-        except urllib.error.HTTPError as e:
-            if e.code == 429:
-                continue
-            if API_KEY and _refus_de_cle(e):
-                print("[ATTENTION] Clé Open-Meteo refusée (invalide ou expirée) : retour à l'API gratuite.")
-                API_KEY = None                     # une seule fois : les appels suivants suivent
-                return _appel_api(params, base_url)
-            raise
-    raise RuntimeError("API Open-Meteo : trop de requêtes (429). Réessayez plus tard.")
-
-
-def recuperer_tmin(latitude, longitude, date_debut, date_fin, modele="MRI_AGCM3_2_S"):
-    """Retourne { 'date': [...], 't_min': [...] } pour la période demandée."""
-    params = {
-        "latitude": latitude, "longitude": longitude,
-        "start_date": date_debut, "end_date": date_fin,
-        "models": modele, "daily": "temperature_2m_min",
-    }
-    daily = (_appel_api(params).get("daily") or {})
-    if not daily.get("time"):
-        raise RuntimeError("Réponse vide de l'API (vérifier le modèle / la période).")
-    return {"date": daily["time"], "t_min": daily.get("temperature_2m_min", [])}
-
-
-def recuperer_serie(id_commune, latitude, longitude, date_debut, date_fin, modele="MRI_AGCM3_2_S"):
-    """Série complète au format du contrat DEV -> DATA (CONTRAT-INTERFACE.md §1) :
-    liste de dicts {id_commune, date, t_min, t_max, t_moy, precip}, un jour par ligne.
-    Période à demander : du 1er juillet de annee_debut-1 au 31 décembre de annee_fin (§1.1).
-    Les valeurs manquantes restent à None : DATA sait les gérer."""
-    params = {
-        "latitude": latitude, "longitude": longitude,
-        "start_date": date_debut, "end_date": date_fin,
-        "models": modele,
-        "daily": "temperature_2m_min,temperature_2m_max,temperature_2m_mean,precipitation_sum",
-    }
-    daily = (_appel_api(params).get("daily") or {})
-    dates = daily.get("time")
-    if not dates:
-        raise RuntimeError("Réponse vide de l'API (vérifier le modèle / la période).")
-
-    def col(nom):
-        valeurs = daily.get(nom) or []
-        return valeurs if len(valeurs) == len(dates) else [None] * len(dates)
-
-    tmin, tmax = col("temperature_2m_min"), col("temperature_2m_max")
-    tmoy, pluie = col("temperature_2m_mean"), col("precipitation_sum")
-    return [{"id_commune": id_commune, "date": d, "t_min": a, "t_max": b, "t_moy": m, "precip": p}
-            for d, a, b, m, p in zip(dates, tmin, tmax, tmoy, pluie)]
-
-
-if __name__ == "__main__":
-    print("Clé API :", "trouvée → serveurs réservés" if API_KEY else "absente → API gratuite")
-    c = recuperer_tmin(43.60, 1.44, "2019-01-01", "2019-12-31")
-    print("Jours récupérés :", len(c["date"]), "| ex :", c["date"][0], c["t_min"][0], "°C")
+[x] DATA : `python test_indicateurs.py` réussit (16 tests), et le calcul des jours de gel tourne sur `series-reel-MRI_AGCM3_2_S.csv` sans modifier le fichier (requête en étoile et calcul_gel.py, vérifiés le [21/11/2026]).

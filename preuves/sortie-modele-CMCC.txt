@@ -1,0 +1,2 @@
+Jours : 550 | incohérents : 0 | manquants : {'t_min': 0, 't_max': 0, 't_moy': 0, 'precip': 0}
+{'id_commune': 1, 'date': '2019-07-01', 't_min': 13.5, 't_max': 19.5, 't_moy': 16.4, 'precip': 3.94}

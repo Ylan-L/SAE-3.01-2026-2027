@@ -1,9 +1,10 @@
 # Contrat d'interface DEV ↔ DATA — « Climat & Cultures »
  
-**Version :** 1.0 — **Date :** 20/11/2026 — **Statut :** validé par les pôles DEV et DATA
+**Version :** 1.1 — **Date :** 23/11/2026 — **Statut :** v1.0 validée par les pôles DEV et DATA ; correction v1.1 proposée par DEV, à valider par DATA
  
 **Historique :**
 - v1.0 (20/11/2026) : première version versionnée. Format vérifié sur l'échantillon réel (5 116 lignes). Toute modification du format passe à 1.1 (compatible) ou 2.0 (qui casse la compatibilité), avec une ligne ici.
+- v1.1 (23/11/2026) : correction compatible, le format de la série ne change pas. L'ordre réel des arguments de `recuperer_serie` est `date_debut, date_fin, modele` (il était écrit `modele, date_debut, date_fin`), et la période demandée est précisée (du 1er juillet de `annee_debut-1` au 31 décembre de `annee_fin`).
 ---
  
 ## 1. En une image
@@ -31,7 +32,7 @@ Une série = **une commune × un modèle**, **un jour par ligne**, avec ces 6 ch
 Exemple (une ligne) : `1,2000-07-01,8.6,19.1,14.5,0.09` (Lille, 1er juillet 2000).
  
 **Ce que DEV livre :**
-- une fonction **`recuperer_serie(id_commune, latitude, longitude, modele, date_debut, date_fin)`** qui renvoie la **liste de dictionnaires** `{id_commune, date, t_min, t_max, t_moy, precip}` (le modèle vient de `dim_modele.code_api`, jamais écrit en dur) ;
+- une fonction **`recuperer_serie(id_commune, latitude, longitude, date_debut, date_fin, modele)`** qui renvoie la **liste de dictionnaires** `{id_commune, date, t_min, t_max, t_moy, precip}` (le modèle vient de `dim_modele.code_api`, jamais écrit en dur) ; la période demandée va du **1er juillet de `annee_debut-1`** au **31 décembre de `annee_fin`**, pour couvrir la saison de gel qui chevauche deux années (comme l'échantillon réel) ; le module `series_contrat.recuperer_series(id_commune, latitude, longitude, annee_debut, annee_fin, modele)` découpe cette période en tranches de 30 ans et renvoie un dictionnaire dont la clé `lignes` est cette liste, avec `jours_incoherents` et `valeurs_manquantes` ;
 - les erreurs claires (API en erreur, réponse vide, timeout) : DEV les signale, DATA n'a pas à les deviner ;
 - le **cache** et les nouvelles tentatives en cas de limite de débit (quota gratuit : 10 000 appels par jour et par adresse IP).
 **Fichiers d'exemple pour tester sans l'API :**

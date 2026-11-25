@@ -1,6 +1,6 @@
 # Contrat d'interface DEV ↔ DATA — « Climat & Cultures »
  
-**Version :** 1.1 — **Date :** 23/11/2026 — **Statut :** v1.0 validée par les pôles DEV et DATA ; correction v1.1 proposée par DEV, à valider par DATA
+**Version :** 1.1 — **Date :** 23/11/2026 — **Statut :** v1.0 validée par les pôles DEV et DATA ; correction v1.1 proposée par DEV, validé par DATA
  
 **Historique :**
 - v1.0 (20/11/2026) : première version versionnée. Format vérifié sur l'échantillon réel (5 116 lignes). Toute modification du format passe à 1.1 (compatible) ou 2.0 (qui casse la compatibilité), avec une ligne ici.

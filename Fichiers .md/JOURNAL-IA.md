@@ -23,7 +23,7 @@
 | Adrien GARRIGON-VIRAMOUTOU | [à compléter ou « Aucun »] | | |
 | Thenujan NANTHAKUMAR | Haiku 4.5 | VS Code| 17/10/2026 |
 | Samuel MIHAILA | [à compléter ou « Aucun »] | | |
-| Ylan LEANG | [à compléter ou « Aucun »] | | |
+| Ylan LEANG | GitHub Copilot | VS Code | Fin 2025 |
 | Adam MURDAKHAIEV | Haiku 4.5  | VS Code| 05/10/2026 |
 | Nabil MERZOUK | [à compléter ou « Aucun »] | | |
 
@@ -43,7 +43,7 @@
 | 24/11/2026 | Thenujan NANTHAKUMAR | claude-haiku-4-5 | Comprendre le fonctionnement d'une API REST | Peux-tu expliquer simplement le fonctionnement d'une API REST ? | Explication du rôle d'une API REST et des échanges entre applications | **Gardé** | Explication utilisée pour comprendre le principe des échanges avec un service externe. Aucun code directement repris dans le projet. | ~328 (entrée 28 / sortie 300) |
 | 24/11/2026 | Thenujan NANTHAKUMAR | claude-haiku-4-5 | Comprendre la gestion des erreurs lors d'un appel API | Comment gérer proprement les erreurs lors d'un appel API en Python ? | Présentation de la gestion des erreurs avec try-except et des bonnes pratiques | **Modifié** | Les principes proposés sont utiles, mais les exemples doivent être adaptés à notre client Open-Meteo qui utilise urllib. | ~325 (entrée 25 / sortie 300) |
 | 24/11/2026 | Thenujan NANTHAKUMAR | claude-haiku-4-5 | Préparer les tests d'une fonction de récupération de données météorologiques | Quels tests simples peut-on réaliser sur une fonction qui récupère des données météorologiques ? | Proposition de tests de réussite et de cas d'erreur pour une fonction météo | **Modifié** | Les propositions servent de pistes pour préparer les tests. Elles doivent être adaptées aux fonctions réellement présentes et exécutées pour confirmer leur validité. | ~333 (entrée 33 / sortie 300) |
-
+| 25/11/2026 | Ylan LEANG | Claude-haiku-4-5 | Test de la clé API | Définition d'un GDD | Définition d'un GDD	| **rejeté** (juste un test, pas intégré au projet) | Vérifier que l'appel fonctionne et que le comptage de tokens s'affiche | 117 |
 *(Ajoutez autant de lignes que nécessaire — notamment celles des autres membres de l'équipe.)*
 
 ---
